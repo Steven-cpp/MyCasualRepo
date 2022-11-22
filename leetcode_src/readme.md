@@ -4,11 +4,11 @@ This repository is just an collection of my trail code while learning C++ primer
 
 So, noted that this repo does **not make any sense**. It is just my own playground.
 
-### 1. Learn to Upload it to GitHub
+### 1. How to Upload it to GitHub
 
 Initially, I already have some cpp files locally. Now, I want to creat a github repo and put everyting up-to-date on it. Can we do that just using shell?
 
-I find the solution from this [githubdocs](https://docs.github.com/en/get-started/importing-your-projects-to-github/importing-source-code-to-github/adding-locally-hosted-code-to-github?platform=mac). It suggestes us do it with Github CLI, which enables us use command line to control our repo on Github. At first, we need to initialize the local directory as a Git repository:
+I find the solution from this [githubdocs](https://docs.github.com/en/get-started/importing-your-projects-to-github/importing-source-code-to-github/adding-locally-hosted-code-to-github?platform=mac). It suggestes us do it with [Github CLI](), which enables us use command line to control our repo on Github. At first, we need to initialize the local directory as a Git repository:
 
 ```bash
 git init -b main
@@ -21,3 +21,77 @@ git add . && git commit -m "initial commit"
 ```
 
 To create a repository for your project on GitHub, use the `gh repo create` subcommand. When prompted, select **Push an existing local repository to GitHub** and enter the desired name for your repository. 
+
+![image-20221122144134656](https://cdn.jsdelivr.net/gh/Steven-cpp/myPhotoSet@master/img/image-20221122144134656.png)
+
+Now, we have successfully created a Github repo based on our working directory.
+
+### 2. Play with Branches
+
+Initially, I am confused with the git concepts and lingos, such as `master`, `origin`, `remote`. Now, I start to understand that *master* is the <u>branch</u>, which     usually serves as a main branch, and *origin* is the alias of the remote host, which can be monitored by  `git remote -v`. With this command, we can know the exact host where we fetch the online code in the current branch from, and push our code to.
+
+For example, if we want to add a remote from Paul, with the url `https://github.com/paulboone/ticgit` and fetch the code from this new remote:
+
+```bash
+$ git remote
+origin
+$ git remote add pb https://github.com/paulboone/ticgit
+$ git remote -v
+origin	https://github.com/schacon/ticgit (fetch)
+origin	https://github.com/schacon/ticgit (push)
+pb	https://github.com/paulboone/ticgit (fetch)
+pb	https://github.com/paulboone/ticgit (push)
+```
+
+Now we can use the string `pb` on the command line, standing for the whole URL. For example, if you want to fetch all the information that Paul has but that you don't yet have in your repository, you can run `git fetch pb`:
+
+```bash
+$ git fetch pb
+remote: Counting objects: 43, done.
+remote: Compressing objects: 100% (36/36), done.
+remote: Total 43 (delta 10), reused 31 (delta 5)
+Unpacking objects: 100% (43/43), done.
+From https://github.com/paulboone/ticgit
+ * [new branch]      master     -> pb/master
+ * [new branch]      ticgit     -> pb/ticgit
+```
+
+Paul’s `master` branch is now accessible locally as `pb/master` — you can merge it into one of your branches, or you can check out a local branch at that point if you want to inspect it.
+
+From then on, it has been a little bit tricky. Because it leads to `merge`, `checkout` and some other concepts. But they are all centered around branches. So, that is why I want to play with branches in this section.
+
+#### 1) Requirements
+
+This repo is mainly for three different tasks:
+
+1. cpp primer trail;
+2. labuladong algorithm;
+3. csapp labs
+
+So, I might as well create three different braches corresponding to these tasks, practicing usage of branches of github. And I am required to conduct the task under the specific branch.
+
+#### 2) Usages
+
+Firstly, I need to create branch named `cpp-trail`:
+
+```bash
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
