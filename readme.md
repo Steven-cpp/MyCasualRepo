@@ -75,9 +75,31 @@ So, I might as well create three different braches corresponding to these tasks,
 Firstly, I need to create branch named `cpp-trail`:
 
 ```bash
+git brach cpp-trail
 ```
 
+Then, stage the modifications and upload it to the remote:
 
+```bash
+$ git commit -m "add branch"
+$ git push -u origin cpp-trail
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (4/4), 2.00 KiB | 2.00 MiB/s, done.
+Total 4 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+remote: 
+remote: Create a pull request for 'cpp-trail' on GitHub by visiting:
+remote:      https://github.com/Steven-cpp/MyCasualRepo/pull/new/cpp-trail
+remote: 
+To https://github.com/Steven-cpp/MyCasualRepo.git
+ * [new branch]      cpp-trail -> cpp-trail
+Branch 'cpp-trail' set up to track remote branch 'cpp-trail' from 'origin'.
+```
+
+We can see that, this branch has also been created in the remote.
 
 
 
