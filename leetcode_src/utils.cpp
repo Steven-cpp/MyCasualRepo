@@ -7,8 +7,9 @@ using namespace std;
 // 实现leetcode的调试工具类，包括:
 // 1. vector的打印与输入;
 // 2. 根据列表生成二叉树
+template<typename T>
 
-void printList(vector<int> arr){
+void printList(vector<T> arr){
     cout << "[";
     for (auto i: arr)
         cout << i << ", ";
