@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <map>
 #include "utils.cpp"
 using namespace std;
 
@@ -10,16 +11,31 @@ public:
     string minWindow(string s, string t) {
         // Sample: "EASABTC", "ABC" --> "ABTC"
         // 1. 定义窗口
+        map<char, int> need, window;
         int left = 0, right = 0;
+        int validCh = 0;
         bool shrinked = false;
         vector<string> res;
+        for (auto c: t)
+            need[c]++;
         while (right < s.length()){
             // 2. 拉伸窗口,直至满足条件
+            char tarCh = s[right];
+            if (need.count(tarCh) > 0){
+                window[tarCh]++;
+                if (window[tarCh] == need[tarCh])
+                    validCh++;
+            }
             right++;
             // 3. 缩小窗口,直至不满足条件
-            while (containStr(s.substr(left, right - left), t)){
-                left++;
+            while (validCh == need.size()){
+                tarCh = s[left++];
                 shrinked = true;
+                if (need.count(tarCh) > 0){
+                    window[tarCh]--;
+                    if (window[tarCh] < need[tarCh])
+                        validCh--;
+                }
             }
             // 4. 保存优化后的结果
             if (shrinked){
@@ -32,17 +48,6 @@ public:
         return res[0];
     }
 private:
-    const static bool containStr(string src, string tar){
-        int id = 0;
-        if (tar.length() == 0) return true;
-        if (src.length() < tar.length()) return false;
-        if ((id = src.find(tar[0])) == -1) return false;
-        else if (tar.length() == 1) return true;
-        else {
-            src.erase(id, 1);
-            return containStr(src, tar.substr(1, tar.length()-1));
-        }
-    }
     const static bool sortBySize(string s1, string s2){
         return s1.length() < s2.length();
     }
