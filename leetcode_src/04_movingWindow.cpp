@@ -47,6 +47,20 @@ public:
         sort(res.begin(), res.end(), sortBySize);
         return res[0];
     }
+
+    bool checkInclusion(string s1, string s2) {
+        // 判断s2是否包含s1的排列
+        // 1. 定义窗口和条件
+
+        // 2. 遍历s2, 判断ch是否为目标字符
+        // 2.1 不是目标字符, left++
+        // 2.2 是目标字符, 拉伸窗口
+            // 3. 如果满足条件, left <- right - s1.length
+            //    判断当前窗口是否是s1的组合
+            // 3.1 如果是, 返回 True
+            // 3.2 如果不是, left <- 窗口的第二个元素
+
+    }
 private:
     const static bool sortBySize(string s1, string s2){
         return s1.length() < s2.length();
