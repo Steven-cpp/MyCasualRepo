@@ -103,7 +103,26 @@ We can see that, this branch has also been created in the remote.
 
 
 
+### 3. Containers in cpp
 
+Grasping the STL containers in C++ is of great importance. So I created `/01_containers` for all my practices that play with containers.
+
+In C++, container is divided into *sequential container*, *associative container*, and *container adapters*. There are three container adapters: stack, queue, and priority_queue. Essentially, an adaptor is a mechanism for making one thing act like another. A container adaptor takes an existing container type and makes it act like a different type. For example, the `stack` adaptor takes a sequential container (other than `array` or `forward_list`) and makes it operate as if it were a stack.
+
+By default both `stack` and `queue` are implemented in terms of `deque`, and a `priority_queue` is implemented on a `vector`. We can override the default container type by naming a sequential container as a second type argument when we create the adaptor:
+
+```cpp
+// empty stack implemented on top of vector 
+stack<string, vector<string>> str_stk; 
+// str_stk2 is implemented on top of vector and initially holds a copy of svec 
+stack<string, vector<string>> str_stk2(svec);
+```
+
+For the most part, the containers deﬁne surprisingly few operations, only including construct, add & remove elements, return specific iterators. Other useful operations, such as **sorting or searching, are deﬁned not by the container types but by the standard algorithms**.
+
+#### 1) Memory Mangement
+
+All the containers (except array) provide efﬁcient dynamic memory management. We may add elements to the container without worrying about where to store the elements. The container itself manages its storage. Both `vector` and `string` provide more detailed control over memory management through their `reserve` and `capacity` members.
 
 
 
