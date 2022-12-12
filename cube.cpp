@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <forward_list>
 using namespace std;
 
 class cube
@@ -48,8 +49,17 @@ cube::~cube()
 }
 
 int main() {
-    cube c;
-    cout << "c.calcCap = " << c.calcCap() << endl;
-    c.setL(5.0);
-    cout << "c.calcCap = " << c.calcCap() << endl;
+    forward_list<int> l = {0, 1, 2, 3, 4, 5};
+    auto prev = l.before_begin();
+    auto curr = l.begin();
+    while (curr != l.end()){
+        if (*curr % 2 == 0)
+            // [IMP]删除后返回指向被删除元素的下一个元素
+            curr = l.erase_after(prev);
+        else{
+            prev = curr;
+            curr++;
+        }
+    }
+    cout << "l[0] = " << *l.begin() << endl;
 }

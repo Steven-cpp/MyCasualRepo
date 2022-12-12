@@ -103,9 +103,62 @@ We can see that, this branch has also been created in the remote.
 
 
 
+### 3. Containers in cpp
+
+Grasping the STL containers in C++ is of great importance. So I created `/01_containers` for all my practices that play with containers.
+
+In C++, container is divided into *sequential container*, *associative container*, and *container adapters*. There are three container adapters: stack, queue, and priority_queue. Essentially, an adaptor is a mechanism for making one thing act like another. A container adaptor takes an existing container type and makes it act like a different type. For example, the `stack` adaptor takes a sequential container (other than `array` or `forward_list`) and makes it operate as if it were a stack.
+
+By default both `stack` and `queue` are implemented in terms of `deque`, and a `priority_queue` is implemented on a `vector`. We can override the default container type by naming a sequential container as a second type argument when we create the adaptor:
+
+```cpp
+// empty stack implemented on top of vector 
+stack<string, vector<string>> str_stk; 
+// str_stk2 is implemented on top of vector and initially holds a copy of svec 
+stack<string, vector<string>> str_stk2(svec);
+```
+
+For the most part, the containers deﬁne surprisingly few operations, only including construct, add & remove elements, return specific iterators. Other useful operations, such as **sorting or searching, are deﬁned not by the container types but by the standard algorithms**.
+
+#### 1) Memory Mangement
+
+All the containers (except array) provide efﬁcient dynamic memory management. We may add elements to the container without worrying about where to store the elements. The container itself manages its storage. Both `vector` and `string` provide more detailed control over memory management through their `reserve` and `capacity` members.
 
 
 
+### 4. Comments
+
+[Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
+
+It is always a good practice to add clear and concise comment to our codes. When it comes to cpp, what is the best practice to document our code?
+
+#### 1) Comment on Functions
+
+A series of `@param` tags, usually one for each parameter. Each tag should have a description following the parameter name. You do *not* usually need to document default arguments; Doxygen will provide the default automatically. If the description extends over multiple lines, each line after the first must be indented.
+
+Parameters should be listed in the same order as they appear in the function or method signature. Make sure to keep the parameter list in sync with the actual parameters; Doxygen will issue a warning if they don’t match.
+
+`@param` should be given with the `[in]`, `[out]`, or `[in, out]` tag if the function method contains any output parameters. The `[in]` tag is optional if all parameters are input, even if other functions or methods in the same class or package use output parameters.
+
+```cpp
+/**
+ * Compute mean and standard deviation for a collection of data.
+ *
+ * @param[out] mean the mean of `data`, or `NaN` if `data` is empty
+ * @param[out] stdDev the unbiased (sample) standard deviation, or `NaN`
+ *     if `data` contains fewer than 2 elements
+ * @param[in] data the data to analyze
+ */
+void computeStatistics(double & mean, double & stdDev, std::vector<double> const & data);
+```
+
+When two or more consecutive parameters have *exactly* the same description, they can be combined:
+
+```cpp
+/**
+ * @param x, y the coordinates where the function is evaluated
+ */
+```
 
 
 
