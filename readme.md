@@ -1,10 +1,10 @@
 ## My Casual Repo
 
-This repository is just an collection of my trail code while learning C++ primer. It also helps me familarize with the git usages. 
+This repository is just an collection of my trail code while learning **C++ primer**. It also helps me familarize with the git usages. 
 
 So, noted that this repo does **not make any sense**. It is just my own playground.
 
-### 1. How to Upload it to GitHub
+### 1. How to Upload local project to GitHub
 
 Initially, I already have some cpp files locally. Now, I want to creat a github repo and put everyting up-to-date on it. Can we do that just using shell?
 
@@ -101,11 +101,9 @@ Branch 'cpp-trail' set up to track remote branch 'cpp-trail' from 'origin'.
 
 We can see that, this branch has also been created in the remote.
 
-
-
 ### 3. Containers in cpp
 
-Grasping the STL containers in C++ is of great importance. So I created `/01_containers` for all my practices that play with containers.
+Now we continue our C++ Primer learning path from *containers*. Grasping the STL containers in C++ is of great importance. So I created `/01_containers` for all my practices that play with containers.
 
 In C++, container is divided into *sequential container*, *associative container*, and *container adapters*. There are three container adapters: stack, queue, and priority_queue. Essentially, an adaptor is a mechanism for making one thing act like another. A container adaptor takes an existing container type and makes it act like a different type. For example, the `stack` adaptor takes a sequential container (other than `array` or `forward_list`) and makes it operate as if it were a stack.
 
@@ -118,11 +116,48 @@ stack<string, vector<string>> str_stk;
 stack<string, vector<string>> str_stk2(svec);
 ```
 
-For the most part, the containers deﬁne surprisingly few operations, only including construct, add & remove elements, return specific iterators. Other useful operations, such as **sorting or searching, are deﬁned not by the container types but by the standard algorithms**.
+For the most part, the containers deﬁne surprisingly few operations, only including construct, add & remove elements, return specific iterators. Other useful operations, such as **sorting or searching, are deﬁned not by the container types but by the standard algorithms**. In this way, we just need to define and remember the independent generalized algorithm, saving ourselves from dealing with every container.
 
 #### 1) Memory Mangement
 
 All the containers (except array) provide efﬁcient dynamic memory management. We may add elements to the container without worrying about where to store the elements. The container itself manages its storage. Both `vector` and `string` provide more detailed control over memory management through their `reserve` and `capacity` members.
+
+#### 2) Generic Alogorithm
+
+The library containers deﬁne a surprisingly small set of operations. Rather than adding lots of functionality to each container, the library provides a set of algorithms, most of which are independent of any particular container type. These algorithms are *generic*: They operate on different types of containers and on elements of various types. We just need to pass in the iterators and target value to use it, such as *searching* and *sorting*.
+
+Noted that, the generic algorithms do not themselves execute container operations. They operate solely in terms of iterators and iterator operations. The fact that the algorithms operate in terms of iterators and not container operations has a perhaps surprising but essential implication: **Algorithms never change the size of the underlying container**. Algorithms <u>may change the values</u> of the elements stored in the container, and they <u>may move elements</u> around within the container. They do not, however, ever add or remove elements directly.
+
+**Read-only Algorithms**
+
+Use `find(3)` to find target value `val` from the given interval in a container. It returns an iterator to the ﬁrst element that is equal to that value. If there is no match, find returns the second parameter (always end of the interval) to indicate failure.
+
+```cpp
+// value we’ll look for 
+int val = 42; 
+// result will denote the element we want if it’s in vec,
+// OR vec.cend() if not
+auto result = find(vec.cbegin(), vec.cend(), val); 
+// report the result 
+cout << "The value " << val << (result == vec.cend() ? " is not present" : " is present") << endl;
+```
+
+Use `accumulate(3)` to sum up over the given interval. Thanks to its third parameter, we can calculate the sum as long as the type supports `+` operator.
+
+```cpp
+// Basic case: integer sum
+int sum = accumulate(vec.cbegin(), vec.cend(), 0);
+// Can also be used to concatenate strings together
+string sum = accumulate(v.cbegin(), v.cend(), string(""));
+```
+
+> 🔍 **When to Use Const Iterators**
+>
+> Ordinarily it is best to use `cbegin()` and `cend()` with algorithms that read, but do not write, the elements. However, if you plan to use the iterator returned by the algorithm to change an element’s value, then you need to pass `begin()` and `end()`.
+
+**Algorithms that Replace Container Elements**
+
+
 
 
 
