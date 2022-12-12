@@ -126,6 +126,40 @@ All the containers (except array) provide efﬁcient dynamic memory management. 
 
 
 
+### 4. Comments
+
+[Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
+
+It is always a good practice to add clear and concise comment to our codes. When it comes to cpp, what is the best practice to document our code?
+
+#### 1) Comment on Functions
+
+A series of `@param` tags, usually one for each parameter. Each tag should have a description following the parameter name. You do *not* usually need to document default arguments; Doxygen will provide the default automatically. If the description extends over multiple lines, each line after the first must be indented.
+
+Parameters should be listed in the same order as they appear in the function or method signature. Make sure to keep the parameter list in sync with the actual parameters; Doxygen will issue a warning if they don’t match.
+
+`@param` should be given with the `[in]`, `[out]`, or `[in, out]` tag if the function method contains any output parameters. The `[in]` tag is optional if all parameters are input, even if other functions or methods in the same class or package use output parameters.
+
+```cpp
+/**
+ * Compute mean and standard deviation for a collection of data.
+ *
+ * @param[out] mean the mean of `data`, or `NaN` if `data` is empty
+ * @param[out] stdDev the unbiased (sample) standard deviation, or `NaN`
+ *     if `data` contains fewer than 2 elements
+ * @param[in] data the data to analyze
+ */
+void computeStatistics(double & mean, double & stdDev, std::vector<double> const & data);
+```
+
+When two or more consecutive parameters have *exactly* the same description, they can be combined:
+
+```cpp
+/**
+ * @param x, y the coordinates where the function is evaluated
+ */
+```
+
 
 
 
