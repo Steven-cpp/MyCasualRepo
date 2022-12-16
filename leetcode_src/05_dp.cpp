@@ -28,10 +28,19 @@ public:
         }
         return dp[ndays-1][1][0];
     }
+    int testN(int n){
+        cout << "n = " << n << endl;
+        return 0;
+    }
 };
 
 int main(){
     DynamicProg dp;
     vector<int> prices = {7,1,5,3,6,4};
     cout << "maxProfit = " << dp.maxProfit(prices) << endl;
+    int n = 5;
+    dp.testN(n--);
+    cout << "END" << endl;
+    
 }
+
