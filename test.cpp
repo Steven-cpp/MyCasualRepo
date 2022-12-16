@@ -1,63 +1,66 @@
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <set>
+using namespace std;
  
-#define PI 3.14159265359
- 
-float sx, sy;
-float f(float px, float py, float theta, float scale, int n) ;
- 
-float sdCircle(float px, float py, float r) {
-    float dx = px - sx, dy = py - sy;
-    return sqrtf(dx * dx + dy * dy)- r;
-}
- 
-float opUnion(float d1, float d2) {
-    return d1 < d2 ? d1 : d2;
-}
- 
-#define T px + scale * r * cosf(theta), py + scale * r * sin(theta)
- 
-float f(float px, float py, float theta, float scale, int n) {
-    float r,d = 0.0f;
- int t;
-    for (r = 0.0f; r < 0.8f; r += 0.02f)
-        d = opUnion(d, sdCircle(T, 0.05f * scale * (0.95f - r)));
- 
-    if (n > 0)
-        for (t = -1; t <= 1; t += 2) {
-            float tt = theta + t * 1.8f;
-            float ss = scale * 0.9f;
-   float r;
-            for ( r = 0.2f; r < 0.8f; r += 0.1f) {
-                d = opUnion(d, f(T, tt, ss * 0.5f, n - 1));
-                ss *= 0.8f;
-            }
-        }
- 
-    return d;
-}
-int ribbon() {
-    float x = (fmodf(sy, 0.1f) / 0.1f - 0.5f) * 0.5f;
-    return sx >= x - 0.05f && sx <= x + 0.05f;
-}
- 
-int main(int argc, char* argv[]) {
-    int n = argc > 1 ? atoi(argv[1]) : 3;
-    float zoom = argc > 2 ? atof(argv[2]) : 1.0f;
-    for (sy = 0.8f; sy > 0.0f; sy -= 0.02f / zoom, putchar('\n'))
-        for (sx = -0.35f; sx < 0.35f; sx += 0.01f / zoom) {
-            if (f(0, 0, PI * 0.5f, 1.0f, n) < 0.0f) {
-                if (sy < 0.1f)
-                    putchar('.');
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        // 1. define two pointers `start`, `end`
+        int n = nums.size();
+        int start = 0, end = n - 1;
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> res;
+
+        // 2. iterate over `end`
+        for (; end > 1 && nums[end] >= 0; end--){
+            // 3.  iterate over `start`
+            for (start = 0; start < end - 1 && nums[start] <= 0; start++){
+                // 3.1 sum > 0, need small value, set `mid = start + 1`
+                int curSum = nums[start] + nums[end];
+                if (curSum > 0){
+                    // 4.  iterate over `mid`
+                    for (int mid = start + 1; mid < end; mid++){
+                        int sum3 = curSum + nums[mid];
+                        // 4.1 sum > 0, this path has dead
+                        if (sum3 > 0) {
+                            start = end - 1;
+                            break;
+                        }
+                        // 4.2 sum == 0, add result
+                        if (sum3 == 0) {
+                            vector<int> res_item = {nums[start], nums[mid], nums[end]};
+                            res.push_back(res_item);
+                        }
+                    }
+                    // 4.3 sum < 0, st++ (do nothing is fine)
+                }
+                
+                // 3.2 sum <= 0, need bigger value, set `mid = end - 1`
                 else {
-                    if (ribbon())
-                        putchar('=');
-                    else
-                        putchar("............................#j&o"[rand() % 32]);
+                    for (int mid = end - 1; mid > start; mid--){
+                        int sum3 = curSum + nums[mid];
+                        if (sum3 < 0) break;
+                        if (sum3 == 0) {
+                            vector<int> res_item = {nums[start], nums[mid], nums[end]};
+                            res.push_back(res_item);
+                            break;
+                        }
+                    }
                 }
             }
-            else
-                putchar(' ');
         }
+        set<vector<int>> resDif(res.begin(), res.end());
+        res.assign(resDif.begin(), resDif.end());
+        return res;     
+    }
+};
+ 
+int main(int argc, char* argv[]) {
+    Solution s;
+    vector<int> vals = {-2,0,1,1,2};
+    auto res = s.threeSum(vals);
+    cout << res.size() << endl;
+    return 0;
 }
