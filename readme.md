@@ -211,6 +211,18 @@ Use `stable_sort(2)` to sort a container, keeping the relative order of the quiv
 
 Therefore, we can safely make a conclusion that mergeSort can keep the relative order of the equivalent elments in one container.
 
+Use `for_each(3)` to apply the given method to elements in the given range:
+
+```cpp
+// print words of the given size or longer, each one followed by a space 
+for_each(wc, words.end(), [](const string &s){cout << s << " ";});
+cout << endl;
+```
+
+
+
+
+
 ### 4. C++11 Features
 
 C++11 is a version of the C++ programming language that was published as an ISO standard in 2011. It introduced a number of significant changes to the language, including support for <u>concurrency</u>, improved support for type inference, and the inclusion of several new features, such as <u>lambda expressions</u> and the `auto` keyword.
