@@ -128,6 +128,22 @@ The library containers deﬁne a surprisingly small set of operations. Rather th
 
 Noted that, the generic algorithms do not themselves execute container operations. They operate solely in terms of iterators and iterator operations. The fact that the algorithms operate in terms of iterators and not container operations has a perhaps surprising but essential implication: **Algorithms never change the size of the underlying container**. Algorithms <u>may change the values</u> of the elements stored in the container, and they <u>may move elements</u> around within the container. They do not, however, ever add or remove elements directly.
 
+However, one method can implicitily invoke `push_back()` method of the container, and thus change the size of the container. This method is defined in `<iterator>` named `back_inserter(1)`, taking a container as input, returning an *insert iterator* bound to that container. We can assign value `i` to the dereferenced insert iterator, which is equivalent to calling `push_back(i)` of this container:
+
+```cpp
+vector<int> vec; // empty vector 
+auto it = back_inserter(vec); // assigning through it adds elements to vec 
+*it = 42; // vec now has one element with value 42
+```
+
+By further extending this usage, we can also combine this with algorithms, enabling change of container size:
+
+```cpp
+vector<int> vec; // empty vector 
+// ok: back_inserter creates an insert iterator that adds elements to vec 
+fill_n(back_inserter(vec), 10, 0); // appends ten elements to vec
+```
+
 **Read-only Algorithms**
 
 Use `find(3)` to find target value `val` from the given interval in a container. It returns an iterator to the ﬁrst element that is equal to that value. If there is no match, find returns the second parameter (always end of the interval) to indicate failure.
@@ -157,7 +173,36 @@ string sum = accumulate(v.cbegin(), v.cend(), string(""));
 
 **Algorithms that Replace Container Elements**
 
+When we use an algorithm that assigns to elements, we must take care to ensure that the sequence into which the algorithm writes is at least as large as the number of elements we ask the algorithm to write.
 
+Use `copy(3)` to copy values from a given range to the destination range starting from the target iterator. Here is an example usage of built-in arrays:
+
+```cpp
+int a1[] = {0,1,2,3,4,5,6,7,8,9};
+int a2[sizeof(a1)/sizeof( * a1)]; // a2 has the same size as a1  
+
+// ret points just past the last element copied into a2
+auto ret = copy(begin(a1), end(a1), a2); // copy a1 into a2
+```
+
+Noted that the returned value `ret` points to the element just next to the last element copied into `a2`.
+
+Use `sort(2) `and `unique(2)` to reoder the array, and finally use `erase(2)` to remove all the rudundant elements, as is shown in the figure below:
+
+![image-20221217121212275](https://raw.githubusercontent.com/Steven-cpp/myPhotoSet/main/image-20221217121212275.png)
+
+Once `vec` is sorted, we want to keep only one copy of each word. The unique algorithm rearranges the input range to "eliminate" adjacent duplicated entries, and <u>returns an iterator that denotes the end of the range of the unique values</u>. The overall code is shown below:
+
+```cpp
+// sort words alphabetically so we can ﬁnd the duplicates 
+sort(words.begin(),words.end());
+
+// unique reorders the input range so that each word appears once in the front portion of the range and returns an iterator one past the unique range 
+auto end_unique = unique(words.begin(), words.end());
+
+// erase uses a vector operation to remove the nonunique elements 
+words.erase(end_unique, words.end());
+```
 
 
 

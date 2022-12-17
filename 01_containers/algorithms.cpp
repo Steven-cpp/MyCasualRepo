@@ -27,5 +27,11 @@ int main(){
     for (auto vec: vec2D)
         fill(vec.begin(), vec.end(), 10);
     cout << "SUCCESS: Filling vec2D with 10" << endl;
+
+    // 3. `fill_n()` and `back_inserter` 
+    vector<int> vec;
+    fill_n(back_inserter(vec), 10, 0);
+    cout << "vec.size() = " << vec.size() << endl;
+
     return 0;
 }
