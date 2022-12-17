@@ -204,7 +204,12 @@ auto end_unique = unique(words.begin(), words.end());
 words.erase(end_unique, words.end());
 ```
 
+Use `stable_sort(2)` to sort a container, keeping the relative order of the quivalent values (judeged by the predicate). This algorithms is implemented by MergeSort. While merging two ordered list, it compares whether left <= right, if so, push the left element to the array. Therefore, for any pair of the equivalent elements, if they are:
 
+- Adjacent: this sort will not change their order;
+- NOT adjacent: they will generally be divided to two groups (left and right), and then merge from left to right, still keeping the original order.
+
+Therefore, we can safely make a conclusion that mergeSort can keep the relative order of the equivalent elments in one container.
 
 ### 4. Comments
 
