@@ -211,7 +211,52 @@ Use `stable_sort(2)` to sort a container, keeping the relative order of the quiv
 
 Therefore, we can safely make a conclusion that mergeSort can keep the relative order of the equivalent elments in one container.
 
-### 4. Comments
+### 4. C++11 Features
+
+C++11 is a version of the C++ programming language that was published as an ISO standard in 2011. It introduced a number of significant changes to the language, including support for <u>concurrency</u>, improved support for type inference, and the inclusion of several new features, such as <u>lambda expressions</u> and the `auto` keyword.
+
+C++11 has been widely adopted and is now considered a "modern" version of C++. It is supported by most modern C++ compilers and is the default version of C++ used in many newer projects. It helps us to write more efficient and effective code.
+
+#### 1) lambda expression
+
+The lambda expression in C++ is an isolated callable object, just like a inline function, but can just use the variable in *capture list*. A lamba expression has the form
+
+```cpp
+[capture list](parameter list) -> return type { function body }
+```
+
+where *capture list* is an (often empty) list of local variables deﬁned in the enclosing function (where this expression is defined); *return type*, *parameter list*, and *function body* are the same as in any ordinary function. However, unlike ordinary functions, a lambda must use a trailing return (§ 6.3.3, p. 229) to specify its return type.
+
+> 📖 **Trailing Return**
+>
+> In C++, a "trailing return" refers to the use of the `->` operator to specify the return type of a function when it is defined, and we use `auto` at the beginning to signal the use of trailing return. This is typically used when the return type depends on template arguments and cannot be specified directly. Instead, the return type can only be infered during compile time.
+>
+> Here is an example of a function with a trailing return type:
+>
+> ```cpp
+> template <typename T, typename U>
+> auto add(T t, U u) -> decltype(t + u)
+> {
+>     return t + u;
+> }
+> ```
+
+We can omit either or both of the parameter list and return type but must always include the capture list and function body. So we can define a simple lambda expression that returns one constant integer:
+
+```cpp
+auto f = [] { return 42; };
+cout << f() << endl;
+```
+
+By filling all the parts, we can then obtain one complete lambda expression:
+
+```cpp
+[sz](const string &a) { return a.size() >= sz; };
+```
+
+
+
+### 5. Comments
 
 [Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
 
