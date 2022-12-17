@@ -2,14 +2,14 @@
 #include <iostream>
 using namespace std;
 
-int findKSubArray(){
+int findKSubArray(vector<int> arr, int k){
     // 找到和能被k整除的所有子集
-    
+    return 0;
 }
 
-vector<long> minimumCost(vector<int> red, vector<int> blue, int blueCost) {
+vector<long long> minimumCost(vector<int> red, vector<int> blue, int blueCost) {
     
-    vector<long> ans = {0};
+    vector<long long> ans = {0};
     int n = red.size();
     vector<vector<long>> dp(n+1, vector<long>(2));
     dp[0][0] = 0;
