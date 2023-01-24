@@ -4,6 +4,10 @@ This repository is just an collection of my trail code while learning **C++ prim
 
 So, noted that this repo does **not make any sense**. It is just my own playground.
 
+## I. Git Usages
+
+I was familiar with git in an IDE, such as Pycharm and IDEA. But when confronted with actual commands especially for authorization and branches, I was confused. So, in this chapter, I will try several use cases, selecting proper commands and understand them.
+
 ### 1. How to Upload local project to GitHub
 
 Initially, I already have some cpp files locally. Now, I want to creat a github repo and put everyting up-to-date on it. Can we do that just using shell?
@@ -219,19 +223,83 @@ for_each(wc, words.end(), [](const string &s){cout << s << " ";});
 cout << endl;
 ```
 
+#### 3) Iterating Reversely
+
+We can use `vec.rbegin()` (reverseBegin) and `vec.rend()` to get the *reverse iterator* and iterate the container reversely.
+
+```cpp
+vector<int> vec = {0,1,2,3,4,5,6,7,8,9}; 
+// reverse iterator of vector from back to front 
+for (auto r_iter = vec.crbegin(); // binds r_iter to the last element
+		 r_iter != vec.crend(); 			// crend refers 1 before 1st element 
+     ++r_iter) 										// decrements the iterator one element 
+  cout << * r_iter << endl; 			// prints 9, 8, 7, . . . 0
+```
+
+Now supposing we want to find the last element seperated by `,` in a word list `s = "Fist, Middle, Last"`. One possible solution is to use reverse iterator:
+
+```cpp
+auto lastComma = find(s.crbegin(), s.crend(), ',');
+cout << string(lastComma.base(), s.cend()) << endl;
+// OUTPUT: Last
+```
+
+Due to the `lastComma` generated from reverse iterator, so it is also a reverse iterator. We can use `base()` method to convert a reverse iterator to the corresponding forward iterator. And it may in turn point to the next forwarding element as is shown in the diagram below:
+
+![image-20221221222840085](https://raw.githubusercontent.com/Steven-cpp/myPhotoSet/main/image-20221221222840085.png)
+
+#### 4) Associative Container
+
+Suppossing that we want to count the words not in the `exclude` word list, we should better use associative container to implement it.
+
+```cpp
+set<string> exclude = {"the", "an", "a"};
+map<string, int> wordcnt;
+
+while (cin << word){
+  if (exclude.find(word) == exclude.end())
+    wordcnt[word]++;
+}
+```
+
+Apart from the commonly used `map` and `set`, C++ also provides multiple-key associative container, such as `multi-set`. The use case for a `std::multiset` is when you need to <u>store elements that may have multiple occurrences, and you want to maintain the order of the elements</u>. For example, you might use a `std::multiset` to store a list of words in a document, and you want to maintain the order of the words as they appear in the document.
+
+**Finding elements in a multi-map**
+
+```cpp
+// deﬁnitions of authors and search_item as above 
+// beg and end denote the range of elements for this author 
+for (auto beg = authors.lower_bound(search_item), 
+     end = authors.upper_bound(search_item);
+     beg != end; ++beg)
+	cout << beg->second << endl; // print each title
+```
+
+
+
+**Adding elements to map**
+
+When we insert into a `map`, we must remember that the element type is a `pair`. Often, we don't have a `pair` object that we want to insert. Instead, we create a pair in the argument list to insert:
+
+```cpp
+// four ways to add word to word_count
+word_count.insert({word, 1});
+word_count.insert(make_pair(word, 1));
+```
 
 
 
 
-### 4. C++11 Features
+
+## II. C++11 Features
 
 C++11 is a version of the C++ programming language that was published as an ISO standard in 2011. It introduced a number of significant changes to the language, including support for <u>concurrency</u>, improved support for type inference, and the inclusion of several new features, such as <u>lambda expressions</u> and the `auto` keyword.
 
 C++11 has been widely adopted and is now considered a "modern" version of C++. It is supported by most modern C++ compilers and is the default version of C++ used in many newer projects. It helps us to write more efficient and effective code.
 
-#### 1) lambda expression
+### 1. lambda expression
 
-The lambda expression in C++ is an isolated callable object, just like a inline function, but can just use the variable in *capture list*. A lamba expression has the form
+The lambda expression in C++ is an isolated callable object, just like a inline function, but can just use the variable in *capture list*. Essentially, when we deﬁne a lambda, the compiler generates a new (unnamed) class type that corresponds to that lambda. A lamba expression has the form
 
 ```cpp
 [capture list](parameter list) -> return type { function body }
@@ -266,9 +334,77 @@ By filling all the parts, we can then obtain one complete lambda expression:
 [sz](const string &a) { return a.size() >= sz; };
 ```
 
+#### 1) Lambda captures and returns
+
+Lambda is actually an unnamed class type. For now, what’s useful to understand is that when we pass a lambda to a function, <u>we are deﬁning both a new type and an object of that type: The argument is an unnamed object of this compiler-generated class type.</u> Similarly, when we use auto to deﬁne a variable initialized by a lambda, we are deﬁning <u>an object of the type generated from that lambda</u>.
+
+By default, the capture is passed by value. The parameters will be stored as a copy when we define the lambda function.
+
+```cpp
+void fcn1() {
+	size_t v1 = 42; // local variable 
+	// copies v1 into the callable object named f
+	auto f = [v1] { return v1; };
+	v1 = 0;
+	auto j = f(); // j is 42; f stored a copy of v1 when we created it
+}
+```
+
+But we can also specify how to pass the parameters either in the capture list, and the  function body:
+
+```cpp
+for_each(words.begin(), words.end(), 
+         [&os, c](const string &s) { os << s << c; });
+```
+
+Noted that **we cannot copy ostream objects**; the only way to capture os is by reference (or through a pointer to os).
+
+What's more, rather than explicitly listing the variables used in the function body, we can also let the compiler to infer which variable to import, by using `=` to imply passing by value and `&` by reference:
+
+```cpp
+void biggies(vector<string> &words, 
+             vector<string>::size_type sz, 
+             ostream &os = cout, char c = ’ ’) {
+  // other processing as before
+  // os implicitly captured by reference; c explicitly captured by value
+  for_each(words.begin(), words.end(), 
+           [&, c](const string &s) { os << s << c; });
+
+  // os explicitly captured by reference; c implicitly captured by value
+  for_each(words.begin(), words.end(),
+           [=, &os](const string &s) { os << s << c; });
+}
+```
+
+#### 2) Bind Function Parameter
+
+It is not so easy to write a function to replace a lambda that captures local variables. But C++11 provides a new keyword `bind` defined in the `functional` header. It takes a callable object and generates a new callable that “adapts” the parameter list of the original object. The common form of a call to `bind` is:
+
+```cpp
+auto newCallable = bind(callable, __n, arg);
+```
+
+which means replacing the $n^{th}$  parameter with `arg` in the original parameter list (still starting from $0$).
+
+### 2. Smart Pointer
+
+Due to the potential risks of using raw pointers, such as memory leak, and invalid use of freed address, C++ 11 provides a smart pointer that can manage the objects using dynamic memory automatically. It is defiend in the `<memory>` header.
+
+There are two types of smart pointers: `shared_ptr` and `unique_ptr`, where `shared_ptr` allows multiple pointers to refer one same object, while the `unique_ptr` owns the object.
+
+#### 1) shared_ptr Class
+
+The safest way to allocate and use dynamic memory is to call a library function named make_shared. This function allocates and initializes an object in dynamic memory and returns a shared_ptr that points to that object.
 
 
-### 5. Comments
+
+
+
+
+
+## III. Formatting
+
+### 1. Comments
 
 [Documenting C++ Code](https://developer.lsst.io/cpp/api-docs.html)
 
@@ -301,6 +437,34 @@ When two or more consecutive parameters have *exactly* the same description, the
  * @param x, y the coordinates where the function is evaluated
  */
 ```
+
+
+
+## IV. Programs Under The Hood
+
+Recently, I am working for my master project, optimizing the GiST index in PostgreSQL. I have complied the original project, getting the executable programs. But now, I need to modify some constants in the source code, and I'm wondering whether the modification will affect the program. Therefore, I need to make it out theoratically and practically.
+
+### I. Compilation Process
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
