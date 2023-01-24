@@ -2,3 +2,4 @@
 .gdbinit
 *.dSYM/
 .DS_Store
+build/
